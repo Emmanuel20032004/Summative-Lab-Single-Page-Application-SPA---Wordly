@@ -1,0 +1,53 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+     
+    <header> 
+        <h1>WORDLY</h1>
+        <p>Wordly, your daily source of vocabulary!</p>
+
+    </header>
+     
+    <main>
+        <!-- Search form -->
+         <form id="Search-form">
+            <input
+            type="text"
+            id="word-input"
+            placeholder="learn a new word"
+            aria-label="enter label"
+            required
+            />
+         </form>
+
+         <!-- error message -->
+          <p id="error-message" class="hidden"></p>
+          
+          <!-- results rendering-->
+           <section id="results" class="hidden">
+            <div class="word-header">
+                <h2 id="word-title"></h2>
+                <button id="play-audio" class="hidden">Play</button>
+                <button id="save-word"> Save</button>
+            </div>
+            <p id="phonetic"></p>
+            <div id="meanings"></div>
+           </section>
+
+
+           <!--saved word list-->
+           <section id="saved-section">
+            <h3>Saved-words</h3>
+            <ul id="saved-list"></ul>
+           </section>
+
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
