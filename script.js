@@ -1,160 +1,114 @@
-// public dictionary url
-const url = "https://api.dictionaryapi.dev/api/v2/entries/en/";
-
-// import html tags
-const form = document.getElementById("word-search");
-const display = document.getElementById("display");
-const nameDisplay = document.getElementById("searched-name");
-const audioDisplay = document.getElementById("word-audio");
-const phoneticsDisplay = document.getElementById("phonetic");
-const meaningsDisplay = document.getElementById("meanings");
-const playButton = document.getElementById("audio-button");
-
-// add event listener to the form
-form.addEventListener("submit", (e) => {
-  e.preventDefault();
-
-  const wordInput = document.getElementById("word-search-input");
-  const word = wordInput.value.trim();
-
-  fetchWordMeaning(word);
-  wordInput.value = "";
-});
-
-// fetch function
-
-async function fetchWordMeaning(word) {
-  try {
-    const response = await fetch(`${url}${word}`);
-    const data = await response.json();
-
-    if (!response.ok) {
-      displayErrors(data);
-      return;
-    }
-    console.log("Past this");
-
-    meaningsDisplay.innerHTML = "";
-    playButton.classList.remove("is-audio");
-    playButton.disabled = true;
-
-    displayMeaning(data);
-  } catch (error) {
-    console.log("Error is:", error.message);
-  }
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
-
-// display the errors
-function displayErrors(data) {
-  meaningsDisplay.innerHTML = "";
-  nameDisplay.innerHTML = "";
-  phoneticsDisplay.innerHTML = "";
-  audioDisplay.src = "";
-  playButton.classList.remove("is-audio");
-  playButton.classList.remove("is-playing");
-  playButton.disabled = true;
-
-  const errorMessageTitle = document.createElement("h2");
-  errorMessageTitle.textContent = data.title;
-  errorMessageTitle.classList.add("error-title");
-
-  const errorMessage = document.createElement("p");
-  errorMessage.textContent = data.message;
-  errorMessage.classList.add("error-message");
-
-  const errorMessageResolution = document.createElement("p");
-  errorMessageResolution.textContent = data.resolution;
-  errorMessageResolution.classList.add("error-resolution");
-
-  meaningsDisplay.appendChild(errorMessageTitle);
-  meaningsDisplay.appendChild(errorMessage);
-  meaningsDisplay.appendChild(errorMessageResolution);
+body {
+  padding: 2rem;
 }
-
-// display the meanings
-function displayMeaning(data) {
-  const firstData = data[0];
-
-  const name = firstData.word;
-  nameDisplay.textContent = name;
-
-  const phonetics = firstData.phonetics[0];
-
-  const phonetic = phonetics?.text ?? "";
-  phoneticsDisplay.textContent = phonetic;
-
-  const phoneticWithAudio = firstData.phonetics.find((p) => p.audio);
-  const audioUrl = phoneticWithAudio ? phoneticWithAudio.audio : null;
-  audioDisplay.src = audioUrl;
-
-  playButton.classList.add("is-audio");
-  playButton.disabled = false;
-  playButton.classList.remove("is-playing");
-
-  data.forEach((entry) => {
-    entry.meanings.forEach((meaning) => {
-      const meaningBlock = document.createElement("div");
-      meaningBlock.classList.add("meaning-block");
-
-      const partsOfSpeechDisplay = document.createElement("i");
-      partsOfSpeechDisplay.textContent = meaning.partOfSpeech;
-      partsOfSpeechDisplay.classList.add("partsOfSpeech");
-      meaningBlock.appendChild(partsOfSpeechDisplay);
-
-      meaning.definitions.forEach((def, index) => {
-        const definitionBlock = document.createElement("div");
-        definitionBlock.classList.add("definition-block");
-
-        const definitionDisplay = document.createElement("p");
-        definitionDisplay.textContent = `${index + 1}. ${def.definition}`;
-        definitionBlock.appendChild(definitionDisplay);
-
-        renderTermList(definitionBlock, def.synonyms, "synonym-list");
-        renderTermList(definitionBlock, def.antonyms, "antonym-list");
-
-        meaningBlock.appendChild(definitionBlock);
-      });
-
-      renderTermList(meaningBlock, meaning?.synonyms, "synonym-list");
-      renderTermList(meaningBlock, meaning?.antonyms, "antonym-list");
-
-      meaningsDisplay.appendChild(meaningBlock);
-    });
-  });
+main {
+  max-width: 90%;
 }
-
-// play audio
-playButton.addEventListener("click", () => {
-  if (!audioDisplay.src) return;
-
-  if (audioDisplay.paused) {
-    audioDisplay.play();
-  } else {
-    audioDisplay.pause();
-  }
-});
-
-audioDisplay.addEventListener("play", () => {
-  playButton.classList.add("is-playing");
-});
-
-audioDisplay.addEventListener("pause", () => {
-  playButton.classList.remove("is-playing");
-});
-
-audioDisplay.addEventListener("ended", () => {
-  playButton.classList.remove("is-playing");
-});
-
-// help populate the lists with synonyms and antonyms
-function renderTermList(container, terms, className) {
-  if (!terms || terms.length === 0) return;
-  const list = document.createElement("ul");
-  list.classList.add(className);
-  terms.forEach((term) => {
-    const item = document.createElement("li");
-    item.textContent = term;
-    list.appendChild(item);
-  });
-  container.appendChild(list);
+#word-search {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+#word-search-input {
+  width: 70%;
+  padding-left: 1rem;
+}
+.audio-button {
+  cursor: not-allowed;
+  padding: 0.5rem 1rem;
+  border: 1px solid blue;
+  border-radius: 5px;
+  background-color: transparent;
+  transition: transform 200ms ease-in-out, background-color 200ms ease-in-out;
+}
+.audio-button:hover {
+  transform: scale(0.98);
+}
+#display {
+  display: grid;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding: 1rem;
+  border-radius: 5px;
+  background-color: rgba(0, 102, 204, 0.08);
+}
+.name-audio-button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.partsOfSpeech {
+  margin-bottom: 1rem;
+  padding: 5px;
+  border-radius: 5px;
+  background-color: #cfe0ff;
+  font-size: 12px;
+}
+.meaning-block {
+  margin-bottom: 1.5rem;
+}
+.definition-block {
+  margin: 0.5rem 0 0.5rem 1rem;
+}
+.synonym-list {
+  color: green;
+}
+.antonym-list {
+  color: crimson;
+}
+.synonym-list,
+.antonym-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 1rem 0;
+  list-style: none;
+}
+.synonym-list li,
+.antonym-list li {
+  padding: 2px 8px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.05);
+  font-size: 12px;
+}
+.audio-button::after {
+  content: "No Audio";
+}
+.audio-button.is-audio,
+.audio-button.is-playing {
+  cursor: pointer;
+}
+.audio-button.is-audio::after {
+  content: "Play Audio";
+}
+.audio-button.is-playing {
+  background-color: blue;
+  color: white;
+}
+.audio-button.is-playing::after {
+  content: "Pause Audio";
+}
+/* Error states */
+.error-title {
+  color: #cc071e;
+}
+.error-message {
+  padding: 1rem 0;
+  color: #a13b3b;
+  font-size: 15px;
+}
+.error-resolution {
+  margin-top: 1rem;
+  padding: 0.5rem;
+  border-radius: 5px;
+  background-color: rgba(0, 102, 204, 0.7);
+  color: #ffffff;
+  font-size: 12px;
+  text-align: center;
 }
