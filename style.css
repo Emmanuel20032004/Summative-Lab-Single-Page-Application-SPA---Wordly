@@ -4,41 +4,33 @@
   padding: 0;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
-
 body {
   padding: 2rem;
 }
-
 main {
   max-width: 90%;
 }
-
-.word-search {
+#word-search {
   display: flex;
   justify-content: space-between;
   gap: 0.5rem;
 }
-
-.word-search-input {
+#word-search-input {
   width: 70%;
   padding-left: 1rem;
 }
-
-.search-button,
 .audio-button {
-  cursor: pointer;
+  cursor: not-allowed;
   padding: 0.5rem 1rem;
   border: 1px solid blue;
   border-radius: 5px;
   background-color: transparent;
   transition: transform 200ms ease-in-out, background-color 200ms ease-in-out;
 }
-
-.search-button:hover {
+.audio-button:hover {
   transform: scale(0.98);
 }
-
-.display {
+#display {
   display: grid;
   gap: 1rem;
   margin-top: 2rem;
@@ -46,13 +38,11 @@ main {
   border-radius: 5px;
   background-color: rgba(0, 102, 204, 0.08);
 }
-
 .name-audio-button {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
-
 .partsOfSpeech {
   margin-bottom: 1rem;
   padding: 5px;
@@ -60,23 +50,18 @@ main {
   background-color: #cfe0ff;
   font-size: 12px;
 }
-
 .meaning-block {
   margin-bottom: 1.5rem;
 }
-
 .definition-block {
   margin: 0.5rem 0 0.5rem 1rem;
 }
-
 .synonym-list {
   color: green;
 }
-
 .antonym-list {
   color: crimson;
 }
-
 .synonym-list,
 .antonym-list {
   display: flex;
@@ -85,7 +70,6 @@ main {
   margin: 1rem 0;
   list-style: none;
 }
-
 .synonym-list li,
 .antonym-list li {
   padding: 2px 8px;
@@ -93,44 +77,32 @@ main {
   background: rgba(0, 0, 0, 0.05);
   font-size: 12px;
 }
-
-.audio-button {
-  cursor: not-allowed;
-}
-
 .audio-button::after {
   content: "No Audio";
 }
-
 .audio-button.is-audio,
 .audio-button.is-playing {
   cursor: pointer;
 }
-
 .audio-button.is-audio::after {
   content: "Play Audio";
 }
-
 .audio-button.is-playing {
   background-color: blue;
   color: white;
 }
-
 .audio-button.is-playing::after {
   content: "Pause Audio";
 }
-
 /* Error states */
 .error-title {
   color: #cc071e;
 }
-
 .error-message {
   padding: 1rem 0;
   color: #a13b3b;
   font-size: 15px;
 }
-
 .error-resolution {
   margin-top: 1rem;
   padding: 0.5rem;
